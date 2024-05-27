@@ -1,0 +1,16 @@
+Project,Lesion,Model,Architecture,Version,Global_Accuracy
+MESCnn,C,mobilenetv2,C,V3,0.946376811594203
+Project,Lesion,Model,Architecture,Version,Global_Accuracy
+MESCnn,S,densenet161,S,V3,0.913146551724138
+Project,Lesion,Model,Architecture,Version,Global_Accuracy
+MESCnn,M,efficientnetv2-m,M,V3,0.6773493975903614
+Project,Lesion,Model,Architecture,Version,Global_Accuracy
+MESCnn,E,efficientnetv2-m,E,V3,0.8774818401937047
+Project,Lesion,Model,Architecture,Version,Global_Accuracy
+Fine_tuned_MESCnn,C,mobilenetv2,C,V3,0.9642512077294685
+Project,Lesion,Model,Architecture,Version,Global_Accuracy
+Fine_tuned_MESCnn,S,densenet161,S,V3,0.9273706896551726
+Project,Lesion,Model,Architecture,Version,Global_Accuracy
+Fine_tuned_MESCnn,M,efficientnetv2-m,M,V3,0.7840963855421687
+Project,Lesion,Model,Architecture,Version,Global_Accuracy
+Fine_tuned_MESCnn,E,efficientnetv2-m,E,V3,0.8738498789346247

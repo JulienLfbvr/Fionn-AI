@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KidneyAI</title>
+    <script src="https://cdn.tailwindcss.com" rel="stylesheet"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+</head>
+
+<body class="flex flex-col h-dvh">
+    <nav class="z-50 top-0 bg-white border-gray-200 w-[100%] shadow-sm">
+        <div class="container sticky mx-auto">
+            <div class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto py-12">
+                <ul class="flex items-center space-x-8">
+                    <li>
+                        <!-- Ajout de 'hover:text-gray-500' pour changer la couleur du texte au survol -->
+                        <a class="text-teal-500 font-bold hover:text-teal-300 cursor-pointer" href="/" style="font-size: 18px;">Home</a>
+                    </li>
+                    <li>
+                        <!-- Ajout de 'hover:text-gray-500' pour changer la couleur du texte au survol -->
+                        <a class="text-gray-950 font-bold hover:text-gray-500 cursor-pointer" href="/results" style="font-size: 18px;">Results</a>
+                    </li>
+                    <li>
+                        <!-- Ajout de 'hover:text-gray-500' pour changer la couleur du texte au survol -->
+                        <a class="text-gray-950 font-bold hover:text-gray-500 cursor-pointer" href="/about" style="font-size: 18px;">About</a>
+                    </li>
+                </ul>
+
+                <div class="history relative" id="history">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6 hover:fill-gray-950 cursor-pointer" viewBox="0 0 503.379 503.379">
+                        <g>
+                            <path d="M458.091,128.116v326.842c0,26.698-21.723,48.421-48.422,48.421h-220.92c-26.699,0-48.421-21.723-48.421-48.421V242.439   c6.907,1.149,13.953,1.894,21.184,1.894c5.128,0,10.161-0.381,15.132-0.969v211.594c0,6.673,5.429,12.104,12.105,12.104h220.92   c6.674,0,12.105-5.432,12.105-12.104V128.116c0-6.676-5.432-12.105-12.105-12.105H289.835c0-12.625-1.897-24.793-5.297-36.315   h125.131C436.368,79.695,458.091,101.417,458.091,128.116z M159.49,228.401c-62.973,0-114.202-51.229-114.202-114.199   C45.289,51.229,96.517,0,159.49,0c62.971,0,114.202,51.229,114.202,114.202C273.692,177.172,222.461,228.401,159.49,228.401z    M159.49,204.19c49.618,0,89.989-40.364,89.989-89.988c0-49.627-40.365-89.991-89.989-89.991   c-49.626,0-89.991,40.364-89.991,89.991C69.499,163.826,109.87,204.19,159.49,204.19z M227.981,126.308   c6.682,0,12.105-5.423,12.105-12.105s-5.423-12.105-12.105-12.105h-56.386v-47.52c0-6.682-5.423-12.105-12.105-12.105   s-12.105,5.423-12.105,12.105v59.625c0,6.682,5.423,12.105,12.105,12.105H227.981z M367.697,224.456h-131.14   c-6.682,0-12.105,5.423-12.105,12.105c0,6.683,5.423,12.105,12.105,12.105h131.14c6.685,0,12.105-5.423,12.105-12.105   C379.803,229.879,374.382,224.456,367.697,224.456z M367.91,297.885h-131.14c-6.682,0-12.105,5.42-12.105,12.105   s5.423,12.105,12.105,12.105h131.14c6.685,0,12.104-5.42,12.104-12.105S374.601,297.885,367.91,297.885z M367.91,374.353h-131.14   c-6.682,0-12.105,5.426-12.105,12.105c0,6.685,5.423,12.104,12.105,12.104h131.14c6.685,0,12.104-5.42,12.104-12.104   C380.015,379.778,374.601,374.353,367.91,374.353z"/>
+                        </g>
+                    </svg>
+
+                    <div id="popup" class="fixed bg-white shadow-lg h-full right-0 mt-12 hidden">
+                        <!-- Previous Reports Section -->
+                        <h2 class="text-xl font-semibold text-teal-500 text-center mb-6 mt-5">Report history</h2>
+                        
+                        <!-- Scrollable Container for Previous Reports -->
+                        <div class="space-y-4 overflow-y-auto max-h-[calc(100vh-13rem)] h-dvh w-full">
+                            {% if history == False %}
+                                <p class="p-14 text-center text-gray-600">No previous reports</p>
+                            {% else%}
+                                <!-- Example of a Repeat Report-->
+                                {% for wsi in history %}
+                                    <div class="p-6 m-2 flex justify-between items-center border-b-2 {% if loop.first %}border-b-2 border-gray-950{% endif %}">
+                                        <div class="space-y-1">
+                                            <span class="block text-lg font-semibold text-gray-900">WSI: {{ wsi.name }}</span>
+                                            <span class="block text-sm text-gray-600">File Size: {{ wsi.filesize }} MB</span>
+                                            <span class="block text-sm text-gray-600">Date: {{ wsi.date }}</span>
+                                        </div>
+                                        <span class="text-green-600 font-bold pl-4">{{ wsi.score }}</span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container h-full mx-auto grow overflow-auto">
+        <div class="flex h-full w-full justify-around">
+            <!-- Conteneur centré pour le premier élément -->
+            <div class="flex justify-center w-1/2 flex-col" id="logContainer">
+                <h1 class="text-[8rem] font-bold analyze-btn-visible">Fionn AI</h1>
+                <form class="flex flex-col w-4/5 pt-2 mb-36" id="dropzone-form">
+                <!-- Image Drop -->
+                {% if errored %}
+                    <div class="w-full animate-pulse text-center p-4 mb-4 bg-gray-100 text-teal-950 rounded-lg">
+                        <p>Last analysis failed</p>
+                    </div>
+                {% endif %}
+
+                    <input id="dropzone-file" type="file" class="hidden" name="file" onchange="updateFileName(this)"/>
+                    <label for="dropzone-file"
+                        class="flex flex-col items-center justify-center w-full h-full z-50 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                        style="background-color: #14b8a6">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                <path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                            </svg>
+                            <p id="file-name" class="mb-2 text-sm text-white"><span
+                                class="font-semibold">Click to upload</span> or drag and drop</p>
+                            <p id="file-type" class="text-xs text-white">TIFF , TIF, PNG, JPEG ( Either a
+                                CROP or WSI)</p>
+                        </div>
+                    </label>
+
+                    <!--Buttons-->
+                    <div class="flex items-center justify-center mb-3 mt-3 flex-col">
+                            <!-- Select Element -->
+                        <div id="filter" class="invisible flex flex-row w-full justify-between items-center mb-3">
+                            <h2 class="text-bold">Use our model : </h2>
+                            <div class="flex flex-row justify-between items-center">
+                                <h2 class="pr-2">M </h2>
+                                <input id="M" type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                            </div>
+                            <div class="flex flex-row justify-between items-center">
+                                <h2 class="pr-2">E </h2>
+                                <input id="E" type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                            </div>
+                            <div class="flex flex-row justify-between items-center">
+                                <h2 class="pr-2">S </h2>
+                                <input id="S" type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                            </div>
+                            <div class="flex flex-row justify-between items-center">
+                                <h2 class="pr-2">C </h2>
+                                <input id="C" type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                            </div>
+                        </div>
+                    
+                            
+                        <button id="analyze-btn" class="invisible flex items-center rounded-lg bg-teal-500 p-2 text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                class="text-white">
+                                <g id="Iconly/Regular/Broken/Search">
+                                    <g id="Search">
+                                        <path id="Search_2"
+                                            d="M21.7555 20.6065L18.3182 17.2458L18.2376 17.1233C18.0878 16.9742 17.883 16.8902 17.6692 16.8902C17.4554 16.8902 17.2505 16.9742 17.1007 17.1233C14.1795 19.8033 9.67815 19.949 6.58201 17.4637C3.48586 14.9784 2.75567 10.6334 4.87568 7.31017C6.9957 3.98697 11.3081 2.71685 14.9528 4.34214C18.5976 5.96743 20.4438 9.98379 19.267 13.7276C19.1823 13.9981 19.2515 14.2922 19.4487 14.4992C19.6459 14.7062 19.9411 14.7946 20.223 14.7311C20.505 14.6676 20.7309 14.4619 20.8156 14.1914C22.2224 9.74864 20.0977 4.96755 15.8161 2.94106C11.5345 0.914562 6.38084 2.25082 3.68905 6.08542C0.99727 9.92001 1.57518 15.1021 5.04893 18.2795C8.52268 21.4569 13.8498 21.6759 17.5841 18.7949L20.6277 21.7705C20.942 22.0765 21.4502 22.0765 21.7645 21.7705C22.0785 21.4602 22.0785 20.9606 21.7645 20.6503L21.7555 20.6065Z"
+                                            fill="currentColor" />
+                                    </g>
+                                </g>
+                            </svg>
+                            <span class="ml-2">Start analyzing</span>
+                        </button>
+
+                            <!-- Loading Bar Structure -->
+                        <div id="loadingBarContainer" class="m-4 w-3/4 mx-auto bg-gray-300 rounded-full overflow-hidden h-2 hidden">
+                            <div id="loadingBar" class="h-full bg-teal-500" style="width: 0%; transition: width 2s ease-in-out;"></div>
+                        </div>  
+                    </div>
+                </form>
+            </div>
+
+            <div class="flex flex-row h-full justify-center overflow-hidden w-1/2">
+                <div class="carousel h-full mr-4 relative ease-linear">
+                    <img id="img0" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img1" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img2" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img3" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img4" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_0" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_1" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_2" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_3" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_4" src="" alt="" class="h-1/4 aspect-square pt-4">
+                </div>
+                <div class="carousel h-full relative ease-linear">
+                    <img id="img5" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img6" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img7" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img8" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img9" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_5" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_6" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_7" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_8" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_9" src="" alt="" class="h-1/4 aspect-square pt-4">
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+
+
+</body>
+
+<!-- LOAD LES FICHIERS JS ICI -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js" integrity="sha512-luMnTJZ7oEchNDZAtQhgjomP1eZefnl82ruTH/3Oj/Yu5qYtwL7+dVRccACS/Snp1lFXq188XFipHKYE75IaQQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="module" src="{{ url_for('static', filename='js/index.js')}}"></script>
+<script type="module" src="{{ url_for('static', filename='js/nav.js')}}"></script>
+<script type="module" src="{{ url_for('static', filename='js/carousels.js')}}"></script>
+<script>
+    function updateFileName(input) {
+        const fileNameElement = document.getElementById('file-name');
+        const fileTypeElement = document.getElementById('file-type');
+        const fileTypeZone = document.getElementById('dropzone-file');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const filter = document.getElementById('filter')
+
+        const acceptedFileTypes = ['tiff', 'tif', 'png', 'jpeg','svs', 'ndpi', 'mrxs', 'scn', 'ome.tiff', 'ome.tif'];
+
+        if (input.files.length > 0) {
+            fileType = input.files[0].name.split('.').pop().toLowerCase();
+            if (!acceptedFileTypes.includes(fileType)) {
+                fileTypeElement.textContent = 'Invalid file type';
+                return;
+            }
+            else{ 
+                fileNameElement.textContent = 'Loaded file: ' + input.files[0].name;
+                fileTypeElement.textContent = 'File type: ' + fileType.toUpperCase();
+                analyzeBtn.classList.remove('invisible');
+                filter.classList.remove('invisible');
+                
+                analyzeBtn.classList.add('analyze-btn-visible');
+                filter.classList.add('analyze-btn-visible');
+            }
+
+        } else {
+            fileNameElement.textContent = 'Click to upload or drag and drop';
+        }
+    }
+</script>
+</html>

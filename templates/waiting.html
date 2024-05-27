@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing image</title>
+    <script src="https://cdn.tailwindcss.com" rel="stylesheet"></script>
+    <style>
+        /* Ajouter des transitions personnalisées pour la liste */
+        #log li {
+            transition: transform 0.5s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mx-auto">
+        <div class="flex h-screen w-full justify-around">
+            <!-- Conteneur centré pour le premier élément -->
+            <div class="flex items-center w-1/2" id="logContainer">
+                <ul class="flex flex-col h-64 mx-h-64 overflow-hidden" id="log">
+                    <!-- Les éléments de liste seront ajoutés ici par JavaScript -->
+                </ul>
+            </div>
+            <div class="flex flex-row h-screen overflow-hidden w-1/2">
+                <div class="carousel h-full mr-4 relative ease-linear hidden">
+                    <img id="img0" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img1" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img2" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img3" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img4" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_0" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_1" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_2" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_3" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_4" src="" alt="" class="h-1/4 aspect-square pt-4">
+                </div>
+                <div class="carousel h-full mr-4 relative ease-linear hidden">
+                    <img id="img5" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img6" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img7" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img8" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img9" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_5" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_6" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_7" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_8" src="" alt="" class="h-1/4 aspect-square pt-4">
+                    <img id="img_9" src="" alt="" class="h-1/4 aspect-square pt-4">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js" integrity="sha512-luMnTJZ7oEchNDZAtQhgjomP1eZefnl82ruTH/3Oj/Yu5qYtwL7+dVRccACS/Snp1lFXq188XFipHKYE75IaQQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    const socket = io();
+
+    socket.on('connect', () => {
+        console.log("Connected");
+        socket.emit('process_img');
+    });
+</script>
+<script type="module" src="{{ url_for('static', filename='js/waiting.js')}}"></script>
+</html>

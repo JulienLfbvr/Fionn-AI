@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample HTML Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com" rel="stylesheet"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+</head>
+
+<body class="flex flex-col h-dvh">
+    <nav class="z-50 top-0 bg-white border-gray-200 w-[100%] shadow-sm">
+        <div class="container sticky mx-auto">
+            <div class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto py-12">
+                <ul class="flex items-center space-x-8">
+                    <li>
+                        <a class="text-gray-950 font-bold hover:text-gray-500 cursor-pointer" href="/" style="font-size: 18px;">Home</a>
+                    </li>
+                    <li>
+                        {% if not is_empty %}
+                            {% if type == "wsi"%}
+                                <a class="text-teal-500 font-bold hover:text-teal-300 cursor-pointer" href="/results" style="font-size: 18px;">Results</a>
+                            {% else %}
+                                <a class="text-purple-300 font-bold hover:text-purple-200 cursor-pointer" href="/results" style="font-size: 18px;">Results</a>
+                            {% endif %}
+                        {% else %}
+                            <a class="text-teal-500 font-bold hover:text-teal-300 cursor-pointer" href="/results" style="font-size: 18px;">Results</a>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <a class="text-gray-950 font-bold hover:text-gray-500 cursor-pointer" href="/about" style="font-size: 18px">About</a>
+                    </li>
+                </ul>
+                <div class="history relative" id="history">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6 hover:fill-gray-950 cursor-pointer" viewBox="0 0 503.379 503.379">
+                        <g>
+                            <path d="M458.091,128.116v326.842c0,26.698-21.723,48.421-48.422,48.421h-220.92c-26.699,0-48.421-21.723-48.421-48.421V242.439   c6.907,1.149,13.953,1.894,21.184,1.894c5.128,0,10.161-0.381,15.132-0.969v211.594c0,6.673,5.429,12.104,12.105,12.104h220.92   c6.674,0,12.105-5.432,12.105-12.104V128.116c0-6.676-5.432-12.105-12.105-12.105H289.835c0-12.625-1.897-24.793-5.297-36.315   h125.131C436.368,79.695,458.091,101.417,458.091,128.116z M159.49,228.401c-62.973,0-114.202-51.229-114.202-114.199   C45.289,51.229,96.517,0,159.49,0c62.971,0,114.202,51.229,114.202,114.202C273.692,177.172,222.461,228.401,159.49,228.401z    M159.49,204.19c49.618,0,89.989-40.364,89.989-89.988c0-49.627-40.365-89.991-89.989-89.991   c-49.626,0-89.991,40.364-89.991,89.991C69.499,163.826,109.87,204.19,159.49,204.19z M227.981,126.308   c6.682,0,12.105-5.423,12.105-12.105s-5.423-12.105-12.105-12.105h-56.386v-47.52c0-6.682-5.423-12.105-12.105-12.105   s-12.105,5.423-12.105,12.105v59.625c0,6.682,5.423,12.105,12.105,12.105H227.981z M367.697,224.456h-131.14   c-6.682,0-12.105,5.423-12.105,12.105c0,6.683,5.423,12.105,12.105,12.105h131.14c6.685,0,12.105-5.423,12.105-12.105   C379.803,229.879,374.382,224.456,367.697,224.456z M367.91,297.885h-131.14c-6.682,0-12.105,5.42-12.105,12.105   s5.423,12.105,12.105,12.105h131.14c6.685,0,12.104-5.42,12.104-12.105S374.601,297.885,367.91,297.885z M367.91,374.353h-131.14   c-6.682,0-12.105,5.426-12.105,12.105c0,6.685,5.423,12.104,12.105,12.104h131.14c6.685,0,12.104-5.42,12.104-12.104   C380.015,379.778,374.601,374.353,367.91,374.353z"/>
+                        </g>
+                    </svg>
+
+                    <div id="popup" class="fixed bg-white shadow-lg h-full right-0 mt-12 hidden">
+                        <!-- Previous Reports Section -->
+                        <h2 class="text-xl font-semibold text-teal-500 text-center mb-6 mt-5">Report history</h2>
+                        
+                        <!-- Scrollable Container for Previous Reports -->
+                        <div class="space-y-4 overflow-y-auto max-h-[calc(100vh-13rem)] h-dvh w-full">
+                            {% if history == False %}
+                                <p class="p-14 text-center text-gray-600">No previous reports</p>
+                            {% else%}
+                                <!-- Example of a Repeat Report-->
+                                {% for wsi in history %}
+                                    <div class="p-6 m-2 flex justify-between items-center border-b-2 {% if loop.first %}border-b-2 border-gray-950{% endif %}">
+                                        <div class="space-y-1">
+                                            <span class="block text-lg font-semibold text-gray-900">WSI: {{ wsi.name }}</span>
+                                            <span class="block text-sm text-gray-600">File Size: {{ wsi.filesize }} MB</span>
+                                            <span class="block text-sm text-gray-600">Date: {{ wsi.date }}</span>
+                                        </div>
+                                        <span class="text-green-600 font-bold pl-4">{{ wsi.score }}</span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    {% if not is_empty %}
+        {% if type == "wsi"%}
+            <!-- Results section -->
+            <div class="container mx-auto flex flex-row flex-wrap h-5/6 text-xl">
+                <div class="flex flex-col justify-between w-1/2 border-r-4">
+                    <!-- Score -->
+                    <div class="p-8 h-1/2">
+                        <h1 class="text-4xl font-bold pb-4">Score</h1>
+                        <p>After extracting and analyzing {{ crop_amount }} glomeruli, the final Oxford score for <span class="font-bold">{{ file_name }}</span> is :</p>
+                        <div class="text-2xl flex w-2/3 mx-auto justify-around text-center font-bold p-4">
+                            <div class="duration-200 hover:scale-105 w-1/4 flex flex-col p-2 border-r-4 border-dotted border-teal-500">
+                                <div class="{%if score.M%}text-teal-500{%endif%} pb-2">
+                                    {{ score.M }}
+                                </div>
+                                <div class="text-base text-teal-950 opacity-40">
+                                    M
+                                </div>
+                            </div>
+                            <div class="duration-200 hover:scale-105 w-1/4 flex flex-col p-2 border-r-4 border-dotted border-teal-500">
+                                <div class="{%if score.E%}text-teal-500{%endif%} pb-2">
+                                    {{ score.E }}
+                                </div>
+                                <div class="text-base text-teal-950 opacity-40">
+                                    E
+                                </div>
+                            </div>
+                            <div class="duration-200 hover:scale-105 w-1/4 flex flex-col p-2 border-r-4 border-dotted border-teal-500">
+                                <div class="{%if score.S%}text-teal-500{%endif%} pb-2">
+                                    {{ score.S }}
+                                </div>
+                                <div class="text-base text-teal-950 opacity-40">
+                                    S
+                                </div>
+                            </div>
+                            <div class="duration-200 hover:scale-105 flex flex-col p-2 w-1/4">
+                                <div class="{%if score.C%}text-teal-500{%endif%} pb-2">
+                                    {{ score.C }}
+                                </div>
+                                <div class="text-base text-teal-950 opacity-40">
+                                    C
+                                </div>
+                            </div>
+                        </div>
+                        <p>The processing of the image took {{ '%0.2f'% processing_time }} seconds.</p>
+                        <p>The overall <span class="font-bold">Oxford score</span> is: <span class="font-bold">{{ score.Oxford }}</span></p>
+                    </div>
+
+                    <!-- Detail -->
+                    <div class="flex flex-col justify-between p-8 h-1/2">
+                        <h1 class="text-4xl font-bold pb-4">Detail</h1>
+                        <canvas id="histogram" style="width: 100%; height: 100%;" class="pr-4"></canvas>
+                        {% if GGS_count == 1%}
+                            <p>
+                                <span class="font-bold">{{GGS_count}}</span> glomerulus with GGS type lesion were detected in the WSI.
+                            </p>
+                        {% elif GGS_count > 1%}
+                            <p>
+                                <span class="font-bold">{{GGS_count}}</span> glomeruli with GGS type lesions were detected in the WSI.
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Insight -->
+                <div class="flex flex-col justify-between w-1/2 p-8">
+                    <div>
+                        <h1 class="text-4xl font-bold pb-4">Insight</h1>
+                        <p>Some extracted glomeruli from the WSI with anomalies :</p>
+                        <div class="flex flex-wrap justify-between gap-4">
+                            {% for img in selected_crops %}
+                                <div class="flex flex-col justify-center w-1/4 hover:scale-105 duration-200">
+                                    <img src="/get_full_crop/{{ img.filename }}" class="w-11/12 aspect-square pt-4 rounded" alt="">
+                                    <p class="text-base pt-1 w-full text-center">{{ img.detected }} was detected</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <a href="/results/0" class="text-center duration-200 bg-transparent hover:bg-teal-500 text-teal-700 font-semibold hover:text-white py-4 px-8 border-4 border-teal-500 hover:border-transparent rounded">
+                        Show each glomerulus' classification
+                    </a>
+
+                    <div class="flex justify-between">
+                        <a href="/download/crops" download="Crops.zip" class="text-center duration-200 bg-teal-500 hover:bg-teal-700 text-white font-bold py-4 px-6 rounded">
+                            Download crops
+                        </a>
+
+                        {% if ggs_count != 0 %}
+                            <a href="/results/GGS/0" class="text-center duration-200 bg-transparent hover:bg-teal-500 text-teal-700 font-semibold hover:text-white py-4 px-2 border-4 border-teal-500 hover:border-transparent rounded">
+                                Show GGS glomeruli's crops
+                            </a>
+                        {% endif %}
+
+                        <a href="/download/report" download="Report.csv" class="text-center duration-200 bg-transparent hover:bg-teal-500 text-teal-700 font-semibold hover:text-white py-4 px-6 border-4 border-teal-500 hover:border-transparent rounded">
+                            Download report
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% elif type == "ggs"%}
+            <div class="container mx-auto h-4/5 grow">
+                <div class="flex h-full w-full justify-around">
+                    <div class="flex justify-center w-1/2 flex-col items-center bg-white">
+                        {% if is_glomerulus %}
+                            <div class="flex justify-around w-full">
+                                <a href="/results/GGS/{{ glomerulus_index - 1 }}" class="text-2xl font-bold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5" stroke="#1e1b4b" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                                    </svg>
+                                </a>
+                                <a href="/results/GGS/{{ glomerulus_index + 1 }}" class="text-2xl font-bold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5" stroke="#1e1b4b" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                    </svg>
+                                </a>
+                            </div>
+                        {% endif %}
+                        <div class="bg-indigo-950 overflow-hidden rounded-full p-8 mb-4">
+                            {% if is_glomerulus %}
+                                <img src="/get_ggs/{{ glomerulus_index }}" class="w-[500px] rounded-full mix-blend-screen" alt="">
+                            {% else %}
+                                <img src="/get_crop" class="w-[500px] rounded-full mix-blend-screen" alt="">
+                            {% endif %}
+                        </div>
+                        <p class="font-italic">{{ file_name }}</p>
+                    </div>
+                    <div class="flex justify-center w-1/2 flex-col">
+                        <h1 class="text-4xl font-bold pb-2">
+                            <span class="text-[#8C6A98]" >GGS</span>
+                            <span class="font-bold"> Glomerulus</span>
+                        </h1>
+                        <p class="mt-8"> In IgA nephropathy (IgAN), global glomerulosclerosis (<span class="text-[#8C6A98] font-bold">GGS</span>) refers to a severe condition where a significant portion of the glomeruli have become hardened and scarred. These hardened structures are unable to function properly, hindering the kidneys' ability to filter waste products from your blood.
+                        The presence of <span class="text-[#8C6A98] font-bold">GGS</span> in a glomerulus is a sign of advanced kidney damage and is often associated with a poor prognosis. The severity of <span class="text-[#8C6A98] font-bold">GGS</span> can vary, with some glomeruli showing only mild scarring while others are completely sclerosed.
+                        </p>
+                    </div>
+                </div>
+            </div>          
+        {% else%}
+            <div class="container mx-auto h-4/5 grow">
+                <div class="flex h-full w-full justify-around">
+                    <div class="flex justify-center w-1/2 flex-col items-center bg-white">
+                        {% if is_glomerulus %}
+                            <div class="flex justify-around w-full">
+                                <a href="/results/{{ glomerulus_index - 1 }}" class="text-2xl font-bold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5" stroke="#1e1b4b" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                                    </svg>
+                                  </a>
+                                <a href="/results/{{ glomerulus_index + 1 }}" class="text-2xl font-bold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3.5" stroke="#1e1b4b" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                    </svg>
+                                </a>
+                            </div>
+                        {% endif %}
+                        <div class="bg-indigo-950 overflow-hidden rounded-full p-8 mb-4">
+                            {% if is_glomerulus %}
+                                <img src="/get_crop/{{ file_name }}" class="w-[500px] rounded-full mix-blend-screen" alt="">
+                            {% else %}
+                                <img src="/get_crop" class="w-[500px] rounded-full mix-blend-screen" alt="">
+                            {% endif %}
+                        </div>
+                        <p class="font-italic">{{ file_name }}</p>
+        
+                    </div>
+        
+                    <div class="flex justify-center w-1/2 flex-col">
+                        <!-- Titre -->
+                        <div class="flex flex-row">
+                            <h1 class="text-4xl font-bold pb-2">
+                                This glomerulus seems in
+                                <span class="text-[#8C6A98]">
+                                    {%if score.M or score.E or score.S or score.C %} poor
+                                    {% else %} good 
+                                    {% endif %}
+                                </span>
+                                health
+                            </h1>
+                        </div>
+        
+                        <!-- Conteneur des éléments de la grille -->
+                        <div class="grid-container mt-8">
+                            <div class="grid-item bg-[#BB99FF] font-bold">M</div>
+                            <div class="grid-item bg-[#BB99FF] font-bold">E</div>
+                            <div class="grid-item bg-[#BB99FF] font-bold">S</div>
+                            <div class="grid-item bg-[#BB99FF] font-bold">C</div>
+                            <div class="grid-item bg-[#ECE3FF] text-black font-bold group">
+                                <span class="group-hover:hidden">{{score.M}}</span>
+                                <span class="hidden group-hover:inline">{{prob.M}}</span>
+                            </div>
+                            <div class="grid-item bg-[#ECE3FF] text-black font-bold group">
+                                <span class="group-hover:hidden">{{score.E}}</span>
+                                <span class="hidden group-hover:inline">{{prob.E}}</span>
+                            </div>
+                            <div class="grid-item bg-[#ECE3FF] text-black font-bold group">
+                                <span class="group-hover:hidden">{{score.S}}</span>
+                                <span class="hidden group-hover:inline">{{prob.S}}</span>
+                            </div>
+                            <div class="grid-item bg-[#ECE3FF] text-black font-bold group">
+                                <span class="group-hover:hidden">{{score.C}}</span>
+                                <span class="hidden group-hover:inline">{{prob.C}}</span>
+                            </div>
+                        </div>
+                        <div class="flex flex row mt-8 w-3/4">
+                            In this context, "M" signifies mesangial hypercellularity, which denotes an elevated count of mesangial cells per glomerulus. "E" stands for endocapillary hypercellularity, indicating the presence of cells within capillary lumina rather than the matrix. "S" represents segmental sclerosis, denoting the formation of scar tissue in the kidney's filtering unit. Lastly, "C" denotes active crescents, characterized by two or more layers of proliferating cells in Bowman's space.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="container mx-auto flex flex-col justify-center items-center h-5/6">
+            <h1 class="text-4xl font-bold pb-4">No results found</h1>
+            <p class="text-xl text-teal-500">Please upload a WSI file to get the results.</p>
+        </div>
+    {% endif %}
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js" integrity="sha512-luMnTJZ7oEchNDZAtQhgjomP1eZefnl82ruTH/3Oj/Yu5qYtwL7+dVRccACS/Snp1lFXq188XFipHKYE75IaQQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="module" src="{{ url_for('static', filename='js/nav.js')}}"></script>
+{% if type == "wsi"%}
+    <script type="module" src="{{ url_for('static', filename='js/results.js')}}"></script>
+{% endif %}
+<script type="module" src="{{ url_for('static', filename='js/carousels.js')}}"></script>
+</html>
