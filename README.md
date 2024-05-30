@@ -119,7 +119,7 @@ The project was guided by:
 We received data (Unlabelled and labelled WSIs) from Dr. Jean-Baptiste Gibier, CHU Lille.
 
 ### Project Presentation
-A presentation detailing the project and its significant performance enhancements is available [here]([https://www.canva.com/design/DAGCqcQAijY/YZ-5nyF3BS1NyReTwN4KcQ/edit?utm_content=DAGCqcQAijY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton](https://www.canva.com/design/DAGFSFyXUQ8/ssKQOfcJ0SAjTLbt0vHgag/view?utm_content=DAGFSFyXUQ8&utm_campaign=designshare&utm_medium=link&utm_source=editor)).
+A presentation detailing the project and its significant performance enhancements is available [here](https://www.canva.com/design/DAGFSFyXUQ8/ssKQOfcJ0SAjTLbt0vHgag/view?utm_content=DAGFSFyXUQ8&utm_campaign=designshare&utm_medium=link&utm_source=editor).
 
 ### Sources
 This project is developed on the foundations provided by the [MESCnn GitHub repository](https://github.com/Nicolik/MESCnn/tree/main).
