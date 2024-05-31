@@ -9,6 +9,7 @@ Key functionalities include **scoring of entire slide images** and **classificat
 
 ## System Requirements and Dependencies
 
+We recommend using a Linux distribution to run this projet. If you are under Windows you can use Ubuntu with WSL to run the code on a VM.
 Ensure you have the following dependencies installed:
 
 1. **Java Environment**
