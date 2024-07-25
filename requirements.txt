@@ -35,7 +35,7 @@ requests==2.31.0
 s3transfer==0.10.1
 shapely==2.0.3
 six==1.16.0
-torch==1.13.1+cu117
+torch==2.2.0
 torchvision==0.14.1+cu117
 tqdm==4.66.2
 typing_extensions==4.10.0
